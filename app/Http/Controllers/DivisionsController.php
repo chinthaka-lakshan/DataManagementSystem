@@ -15,9 +15,9 @@ class DivisionsController extends Controller
      */
     public function index()
     {
-        $divisions = Divisions::all(); // Fetches all records from the DB
+        $divisions = Divisions::all();
         return response()->view('divisions.index', [
-            'divisions' => $divisions, // Passes data to the Blade view
+            'divisions' => $divisions,
         ]);
     }
 
@@ -40,7 +40,7 @@ class DivisionsController extends Controller
             'divisional_secretariat' => 'required|string|max:255',
         ]);
 
-        Division::create($validated);
+        Divisions::create($validated);
 
         return redirect()->route('divisions.index')
                          ->with('success', 'GN Division created successfully!');
@@ -57,17 +57,26 @@ class DivisionsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Divisions $divisions)
+    public function edit(Divisions $division)
     {
-        //
+        return view('divisions.edit', compact('division'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Divisions $divisions)
+    public function update(Request $request, Divisions $division)
     {
-        //
+        $validated = $request->validate([
+            'division_code' => 'required|max:50|unique:divisions,division_code,' . $division->id,
+            'division_name' => 'required|string|max:255',
+            'divisional_secretariat' => 'required|string|max:255',
+        ]);
+
+        $division->update($validated);
+
+        return redirect()->route('divisions.index')
+                         ->with('success', 'GN Division updated successfully!');
     }
 
     /**
