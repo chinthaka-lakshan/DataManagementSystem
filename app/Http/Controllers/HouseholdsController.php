@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Division;
+use App\Models\Divisions;
+use App\Models\Households;
+use App\Models\Citizens;
 use Illuminate\Http\Request;
 
-class DivisionsController extends Controller
+class HouseholdsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $divisions = Division::all();
-        return view('divisions.index', compact('divisions'));
-    }
+{
+    $households = Households::with('division')->get();
+    return view('households.index', compact('households'));
+}
 
     /**
      * Show the form for creating a new resource.
@@ -22,9 +24,9 @@ class DivisionsController extends Controller
      */
     public function create()
     {
-        return view('divisions.create');
+        $divisions = Divisions::all();
+        return view('households.create', compact('divisions'));
     }
-
     /**
      * Store a newly created resource in storage.
      * THIS ENABLES THE divisions.store ROUTE
@@ -32,14 +34,13 @@ class DivisionsController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'division_code' => 'required|unique:divisions|max:50',
-            'division_name' => 'required|string|max:255',
-            'divisional_secretariat' => 'required|string|max:255',
+            'house_number' => 'required|unique:households',
+            'address' => 'required|string',
+            'division_id' => 'required|exists:divisions,id',
+            'head_of_household' => 'required|string',
         ]);
 
-        Division::create($validated);
-
-        return redirect()->route('divisions.index')
-                         ->with('success', 'GN Division added successfully.');
+        Households::create($validated);
+        return redirect()->route('households.index')->with('success', 'Household added.');
     }
 }
