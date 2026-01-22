@@ -51,8 +51,8 @@
                         <div class="p-6">
                             <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Religion Distribution</p>
                             <div class="mt-2 flex justify-between">
-                                <div><span class="text-xs text-gray-400">Buddhist</span> <p class="text-xl font-bold">{{ $stats['buddhist'] }}</p></div>
-                                <div><span class="text-xs text-gray-400">Catholic</span> <p class="text-xl font-bold">{{ $stats['catholic'] }}</p></div>
+                                <div><span class="text-xs text-gray-400">Buddhis</span> <p class="text-xl font-bold">{{ $stats['buddhism'] }}</p></div>
+                                <div><span class="text-xs text-gray-400">Christianity</span> <p class="text-xl font-bold">{{ $stats['christianity'] }}</p></div>
                             </div>
                         </div>
                     </div>
@@ -63,6 +63,60 @@
                     <p>Please select a GN Division above to view statistics.</p>
                 </div>
             @endif
+
+            @if($selectedDivisionId)
+    <div class="bg-white overflow-hidden shadow sm:rounded-lg p-6 mt-6">
+        <h3 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Households in this Division</h3>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-gray-50 text-xs uppercase text-gray-700">
+                    <tr>
+                        <th class="px-4 py-2">House No</th>
+                        <th class="px-4 py-2">Address</th>
+                        <th class="px-4 py-2">Head of Household</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($households as $household)
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="px-4 py-2 font-bold">{{ $household->house_number }}</td>
+                            <td class="px-4 py-2">{{ $household->address }}</td>
+                            <td class="px-4 py-2">{{ $household->head_of_household }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="bg-white overflow-hidden shadow sm:rounded-lg p-6 mt-6">
+        <h3 class="text-lg font-medium text-gray-900 mb-4 border-b pb-2">Registered Citizens</h3>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-gray-50 text-xs uppercase text-gray-700">
+                    <tr>
+                        <th class="px-4 py-2">NIC</th>
+                        <th class="px-4 py-2">Full Name</th>
+                        <th class="px-4 py-2">Gender</th>
+                        <th class="px-4 py-2">Household No</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($citizens as $citizen)
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="px-4 py-2 font-medium">{{ $citizen->nic }}</td>
+                            <td class="px-4 py-2">{{ $citizen->full_name }}</td>
+                            <td class="px-4 py-2">{{ $citizen->gender }}</td>
+                            <td class="px-4 py-2 text-indigo-600 font-bold">
+                                {{ $citizen->household->house_number ?? 'N/A' }}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+@endif
 
         </div>
     </div>
