@@ -21,7 +21,7 @@
                         {{ __('Divisions') }}
                     </x-nav-link>
 
-                    <x-nav-link href="#" :active="false">
+                    <x-nav-link :href="route('households.index')" :active="request()->routeIs('households.*')">
                         {{ __('Households') }}
                     </x-nav-link>
 
