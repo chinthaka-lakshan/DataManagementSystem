@@ -24,7 +24,9 @@ class CitizensController extends Controller
      */
     public function create()
     {
-        //
+        return view('citizens.create');
+        $divisions = Divisions::all();
+        return view('citizens.create', compact('divisions'));
     }
 
     /**
@@ -32,7 +34,24 @@ class CitizensController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'household_id' => 'required|exists:households,id',
+            'division_id' => 'required|exists:divisions,id',
+            'full_name' => 'required|string',
+            'nic' => 'nullable|string|unique:citizens,nic',
+            'date_of_birth' => 'required|date',
+            'gender' => 'required|enum:Male,Female,Other',
+            'religion' => 'required|enum:Buddhism,Hinduism,Islam,Christianity,Other',
+            'marital_status' => 'required|string',
+            'occupation' => 'nullable|string',
+            'education_level' => 'nullable|string',
+            'income_level' => 'nullable|decimal',
+            'samurdhi_status' => 'nullable|boolean',
+            'special_notes' => 'nullable|string',
+        ]);
+
+        Citizen::create($validated);
+        return redirect()->route('citizens.index')->with('success', 'Member added to household.');
     }
 
     /**

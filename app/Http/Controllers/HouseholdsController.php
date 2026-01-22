@@ -43,4 +43,47 @@ class HouseholdsController extends Controller
         Households::create($validated);
         return redirect()->route('households.index')->with('success', 'Household added.');
     }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Households $household)
+    {
+        $divisions = Divisions::all();
+        return view('households.edit', compact('household', 'divisions'));
+    }
+    /**
+     * Display the specified resource.
+     */
+
+    public function show(Households $household)
+    {
+        return redirect()->route('households.index');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+
+    public function update(Request $request, Households $household)
+    {
+        $validated = $request->validate([
+            'house_number' => 'required|unique:households,house_number,' . $household->id,
+            'address' => 'required|string',
+            'division_id' => 'required|exists:divisions,id',
+            'head_of_household' => 'required|string',
+        ]);
+
+        $household->update($validated);
+        return redirect()->route('households.index')->with('success', 'Household updated.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Households $household)
+    {
+        $household->delete();
+        return redirect()->route('households.index')->with('success', 'Household deleted.');
+    }
 }
