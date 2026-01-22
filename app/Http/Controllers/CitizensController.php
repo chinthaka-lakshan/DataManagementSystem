@@ -12,17 +12,30 @@ class CitizensController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $search = request()->query('search');
-        $citizens = Citizens ::with(['household', 'division'])
+        $search = $request->query('search');
+        $selectedDivision = $request->query('division_id'); // Get selected filter
+        
+        // Fetch all divisions for the dropdown
+        $divisions = \App\Models\Divisions::all();
+
+        $citizens = \App\Models\Citizens::with(['household', 'division'])
+            // Filter by Division
+            ->when($selectedDivision, function ($query, $selectedDivision) {
+                return $query->where('division_id', $selectedDivision);
+            })
+            // Search by Name or NIC
             ->when($search, function ($query, $search) {
-                $query->where('full_name', 'like', '%' . $search . '%')
-                      ->orWhere('nic', 'like', '%' . $search . '%');
+                return $query->where(function($q) use ($search) {
+                    $q->where('full_name', 'like', '%' . $search . '%')
+                    ->orWhere('nic', 'like', '%' . $search . '%');
+                });
             })
             ->orderBy('full_name')
             ->paginate(10);
-        return view('citizens.index', compact('citizens'));
+
+        return view('citizens.index', compact('citizens', 'divisions', 'selectedDivision', 'search'));
     }
 
     /**

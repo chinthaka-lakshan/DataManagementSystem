@@ -12,11 +12,30 @@ class HouseholdsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-{
-    $households = Households::with('division')->get();
-    return view('households.index', compact('households'));
-}
+    public function index(Request $request)
+    {
+        $selectedDivision = $request->query('division_id');
+        $search = $request->query('search'); // Get the search input
+        
+        $divisions = \App\Models\Divisions::all();
+
+        $households = \App\Models\Households::with('division')
+            // Filter by Division
+            ->when($selectedDivision, function ($query, $selectedDivision) {
+                return $query->where('division_id', $selectedDivision);
+            })
+            // Search by Address, House Number, or Head of Household
+            ->when($search, function ($query, $search) {
+                return $query->where(function($q) use ($search) {
+                    $q->where('address', 'like', '%' . $search . '%')
+                    ->orWhere('house_number', 'like', '%' . $search . '%')
+                    ->orWhere('head_of_household', 'like', '%' . $search . '%');
+                });
+            })
+            ->get();
+
+        return view('households.index', compact('households', 'divisions', 'selectedDivision', 'search'));
+    }
 
     /**
      * Show the form for creating a new resource.
