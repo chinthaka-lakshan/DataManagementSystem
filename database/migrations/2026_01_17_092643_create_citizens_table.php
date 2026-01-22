@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('citizens', function (Blueprint $table) {
             $table->id();
             $table->foreignId('household_id')->constrained()->onDelete('cascade');
+            $table->foreignId('division_id')->constrained()->onDelete('cascade');
             $table->string('full_name');
             $table->string('nic', 12)->unique()->nullable();
             $table->date('date_of_birth');
             $table->enum('gender', ['Male', 'Female', 'Other']);
+            $table->enum('religion', ['Buddhism', 'Hinduism', 'Islam', 'Christianity', 'Other']);
             $table->string('marital_status');
             $table->string('occupation')->nullable();
             $table->string('education_level')->nullable();

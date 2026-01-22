@@ -26,6 +26,7 @@
                             <tr>
                                 <th>Household Number</th>
                                 <th>Address</th>
+                                <th>Head of Household</th>
                                 <th>Division</th>
                                 <th>Actions</th>
                             </tr>
@@ -35,10 +36,19 @@
                                 <tr>
                                     <td>{{ $household->house_number }}</td>
                                     <td>{{ $household->address }}</td>
+                                    <td>{{ $household->head_of_household }}</td>
                                     <td>{{ $household->division->division_name }}</td>
                                     <td>
+                                    <div class="flex items-center gap-2">
                                         <a href="{{ route('households.edit', $household->id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
-                                    </td>
+
+                                        <form action="{{ route('households.destroy', $household->id) }}" method="POST" 
+                                            onsubmit="return confirm('Are you sure you want to delete this household?');">
+                                            @csrf
+                                            @method('DELETE') <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
                                 </tr>
                             @empty
                                 <tr>
