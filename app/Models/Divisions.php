@@ -17,4 +17,8 @@ class Divisions extends Model
     {
         return $this->hasMany(Household::class);
     }
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

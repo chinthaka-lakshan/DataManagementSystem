@@ -15,12 +15,11 @@ class DivisionsController extends Controller
      */
     public function index()
     {
-        $divisions = Divisions::all();
-        return response()->view('divisions.index', [
-            'divisions' => $divisions,
-        ]);
-    }
+        // Access as a property to get the Collection of divisions
+        $divisions = auth()->user()->divisions; 
 
+        return view('divisions.index', compact('divisions'));
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -40,7 +39,7 @@ class DivisionsController extends Controller
             'divisional_secretariat' => 'required|string|max:255',
         ]);
 
-        Divisions::create($validated);
+        auth()->user()->divisions()->create($validated);
 
         return redirect()->route('divisions.index')
                          ->with('success', 'GN Division created successfully!');
