@@ -45,4 +45,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function divisions()
+    {
+        return $this->hasMany(Divisions::class);
+    }
 }

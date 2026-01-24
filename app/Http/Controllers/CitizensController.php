@@ -15,17 +15,24 @@ class CitizensController extends Controller
     public function index(Request $request)
     {
         $search = $request->query('search');
-        $selectedDivision = $request->query('division_id'); // Get selected filter
+        $selectedDivision = $request->query('division_id');
         
-        // Fetch all divisions for the dropdown
-        $divisions = \App\Models\Divisions::all();
+        // 1. Only fetch divisions created by the logged-in user
+        $divisions = auth()->user()->divisions; 
+        
+        // 2. Get a list of IDs for those divisions to secure the main query
+        $userDivisionIds = $divisions->pluck('id');
 
         $citizens = \App\Models\Citizens::with(['household', 'division'])
-            // Filter by Division
+            // 3. Mandatory Security: Only show citizens in the user's divisions
+            ->whereIn('division_id', $userDivisionIds)
+            
+            // 4. Optional Filter: If a specific division is selected from the dropdown
             ->when($selectedDivision, function ($query, $selectedDivision) {
                 return $query->where('division_id', $selectedDivision);
             })
-            // Search by Name or NIC
+            
+            // 5. Search by Name or NIC
             ->when($search, function ($query, $search) {
                 return $query->where(function($q) use ($search) {
                     $q->where('full_name', 'like', '%' . $search . '%')

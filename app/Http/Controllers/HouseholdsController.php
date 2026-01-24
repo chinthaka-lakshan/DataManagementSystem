@@ -14,17 +14,25 @@ class HouseholdsController extends Controller
      */
     public function index(Request $request)
     {
-        $selectedDivision = $request->query('division_id');
-        $search = $request->query('search'); // Get the search input
+        // 1. Fetch only divisions belonging to the authenticated user
+        $divisions = auth()->user()->divisions;
         
-        $divisions = \App\Models\Divisions::all();
+        // 2. Extract the IDs for security filtering
+        $userDivisionIds = $divisions->pluck('id');
+
+        $selectedDivision = $request->query('division_id');
+        $search = $request->query('search');
 
         $households = \App\Models\Households::with('division')
-            // Filter by Division
+            // 3. Security: Only show households belonging to this user's divisions
+            ->whereIn('division_id', $userDivisionIds)
+            
+            // 4. Filter by Division (if selected and belongs to user)
             ->when($selectedDivision, function ($query, $selectedDivision) {
                 return $query->where('division_id', $selectedDivision);
             })
-            // Search by Address, House Number, or Head of Household
+            
+            // 5. Search by Address, House Number, or Head of Household
             ->when($search, function ($query, $search) {
                 return $query->where(function($q) use ($search) {
                     $q->where('address', 'like', '%' . $search . '%')
