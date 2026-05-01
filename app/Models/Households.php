@@ -21,8 +21,8 @@ class Households extends Model
         return $this->belongsTo(Divisions::class, 'division_id');
     }
 
-    public function citizens(): HasMany
+    public function citizens()
     {
-        return $this->hasMany(Citizens::class);
+        return $this->hasMany(Citizens::class, 'household_id');
     }
 }

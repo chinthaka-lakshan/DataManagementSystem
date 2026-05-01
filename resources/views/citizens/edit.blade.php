@@ -89,8 +89,13 @@
 
                     <div>
                         <label for="marital_status" class="block text-sm font-semibold text-gray-700 mb-2">Marital Status <span class="text-brand-600">*</span></label>
-                        <input type="text" name="marital_status" id="marital_status" required value="{{ old('marital_status', $citizen->marital_status) }}"
+                        <select name="marital_status" id="marital_status" required
                             class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm">
+                            @foreach(['Single', 'Married', 'Divorced', 'Widowed'] as $status)
+                                <option value="{{ $status }}" {{ old('marital_status', $citizen->marital_status) == $status ? 'selected' : '' }}>{{ $status }}</option>
+                            @endforeach
+                        </select>
+                        @error('marital_status') <p class="text-xs text-brand-600 mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
             </div>

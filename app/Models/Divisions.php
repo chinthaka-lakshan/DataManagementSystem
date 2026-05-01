@@ -13,9 +13,9 @@ class Divisions extends Model
         'division_name',
         'divisional_secretariat',
     ];
-    public function households(): HasMany
+    public function households()
     {
-        return $this->hasMany(Household::class);
+        return $this->hasMany(Households::class, 'division_id');
     }
     public function user()
     {
