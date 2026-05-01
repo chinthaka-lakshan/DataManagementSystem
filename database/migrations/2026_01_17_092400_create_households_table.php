@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('house_number');   
             $table->text('address');
             $table->string('head_of_household');
+            $table->string('nic')->nullable();
             $table->timestamps();
         });
     }

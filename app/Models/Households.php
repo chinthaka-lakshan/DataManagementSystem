@@ -13,6 +13,7 @@ class Households extends Model
         'house_number',
         'address',
         'head_of_household',
+        'nic',
     ];
 
     public function division()

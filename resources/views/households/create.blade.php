@@ -1,97 +1,87 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Register New Household') }}
-        </h2>
-    </x-slot>
+<x-admin-layout>
+    <x-slot name="title">Register New Household</x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900">Household Information</h2>
+            <p class="text-sm text-gray-500 mt-1">Assign a unique household number and registered address to a GN Division.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden">
+            <form action="{{ route('households.store') }}" method="POST" class="p-8 space-y-6">
+                @csrf 
                 
-                <div class="mb-6 border-b pb-4">
-                    <h2 class="text-lg font-medium text-gray-900">Household Information</h2>
-                    <p class="mt-1 text-sm text-gray-600">Assign a unique household number and registered address to a GN Division.</p>
-                </div>
-
-                <form action="{{ route('households.store') }}" method="POST">
-                    @csrf 
-                    
-                    <div class="row g-4">
-                        <div class="col-md-12 mb-3">
-                            <label for="division_id" class="block font-medium text-sm text-gray-700 mb-2">Assigned GN Division <span class="text-danger">*</span></label>
-                            <select name="division_id" 
-                                    id="division_id" 
-                                    class="block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm @error('division_id') border-red-500 @enderror" 
-                                    required>
-                                <option value="">-- Select Division --</option>
-                                @foreach($divisions as $division)
-                                    <option value="{{ $division->id }}" {{ old('division_id') == $division->id ? 'selected' : '' }}>
-                                        {{ $division->division_code }} - {{ $division->division_name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('division_id')
-                                <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="household_number" class="block font-medium text-sm text-gray-700 mb-2">House Number <span class="text-danger">*</span></label>
-                            <input type="text" 
-                                   name="house_number" 
-                                   id="house_number"
-                                   class="block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm @error('house_number') border-red-500 @enderror" 
-                                   placeholder="e.g. KOT/102/2026" 
-                                   value="{{ old('house_number') }}" 
-                                   required>
-                            @error('house_number')
-                                <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="address" class="block font-medium text-sm text-gray-700 mb-2">Registered Address <span class="text-danger">*</span></label>
-                            <input type="text" 
-                                   name="address" 
-                                   id="address"
-                                   class="block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm @error('address') border-red-500 @enderror" 
-                                   placeholder="House No, Street Name, Town" 
-                                   value="{{ old('address') }}" 
-                                   required>
-                            @error('address')
-                                <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
-                            @enderror
-                        </div>
-                        <div class="col-md-12 mb-3"> <label for="head_of_household" class="block font-medium text-sm text-gray-700 mb-2">
-                            Head of Household Name <span class="text-danger">*</span>
-                        </label>
-                        <input type="text" 
-                            name="head_of_household" 
-                            id="head_of_household"
-                            class="block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm @error('head_of_household') border-red-500 @enderror" 
-                            placeholder="Full Name of the head of the family" 
-                            value="{{ old('head_of_household') }}" 
-                            required>
-                        @error('head_of_household')
-                            <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        <label for="division_id" class="block text-sm font-semibold text-gray-700 mb-2">Assigned GN Division <span class="text-brand-600">*</span></label>
+                        <select name="division_id" id="division_id" required
+                            class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm @error('division_id') border-brand-500 @enderror">
+                            <option value="">-- Select Division --</option>
+                            @foreach($divisions as $division)
+                                <option value="{{ $division->id }}" {{ old('division_id') == $division->id ? 'selected' : '' }}>
+                                    {{ $division->division_code }} - {{ $division->division_name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('division_id')
+                            <p class="text-xs text-brand-600 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+
+                    <div>
+                        <label for="house_number" class="block text-sm font-semibold text-gray-700 mb-2">House Number <span class="text-brand-600">*</span></label>
+                        <input type="text" name="house_number" id="house_number" required
+                            value="{{ old('house_number') }}"
+                            class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm @error('house_number') border-brand-500 @enderror"
+                            placeholder="e.g. KOT/102/2026">
+                        @error('house_number')
+                            <p class="text-xs text-brand-600 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
-                    <div class="flex items-center justify-end mt-6 pt-4 border-t gap-3">
-                        <a href="{{ route('households.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                            Cancel
-                        </a>
-                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                            Save Household
-                        </button>
+                    <div>
+                        <label for="address" class="block text-sm font-semibold text-gray-700 mb-2">Registered Address <span class="text-brand-600">*</span></label>
+                        <input type="text" name="address" id="address" required
+                            value="{{ old('address') }}"
+                            class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm @error('address') border-brand-500 @enderror"
+                            placeholder="House No, Street Name, Town">
+                        @error('address')
+                            <p class="text-xs text-brand-600 mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
-                </form>
 
-            </div>
+                    <div>
+                        <label for="head_of_household" class="block text-sm font-semibold text-gray-700 mb-2">Head of Household Name <span class="text-brand-600">*</span></label>
+                        <input type="text" name="head_of_household" id="head_of_household" required
+                            value="{{ old('head_of_household') }}"
+                            class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm @error('head_of_household') border-brand-500 @enderror"
+                            placeholder="Full Name">
+                        @error('head_of_household')
+                            <p class="text-xs text-brand-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="nic" class="block text-sm font-semibold text-gray-700 mb-2">NIC Number</label>
+                        <input type="text" name="nic" id="nic"
+                            value="{{ old('nic') }}"
+                            class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm @error('nic') border-brand-500 @enderror"
+                            placeholder="e.g. 199012345678 or 901234567V">
+                        @error('nic')
+                            <p class="text-xs text-brand-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-100">
+                    <a href="{{ route('households.index') }}" class="px-6 py-2.5 bg-white border border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors">
+                        Cancel
+                    </a>
+                    <button type="submit" class="px-6 py-2.5 bg-brand-600 text-white font-semibold rounded-xl hover:bg-brand-700 shadow-md shadow-brand-200 transition-colors">
+                        Save Household
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-</x-app-layout>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</x-admin-layout>

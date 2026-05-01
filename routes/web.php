@@ -13,7 +13,7 @@ Route::get('/', function () {
 });
 
 // Move divisions inside the auth middleware for security
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'active'])->group(function () {
     // Only keep this version of the dashboard route
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->middleware(['verified'])
@@ -23,6 +23,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('households', HouseholdsController::class);
     Route::resource('citizens', CitizensController::class);
     Route::resource('certificates', CertificatesController::class);
+
+    // Admin only routes
+    Route::middleware('role:admin')->group(function () {
+        Route::resource('users', \App\Http\Controllers\UserController::class);
+        
+        Route::get('/activity-logs', function() {
+            return view('admin.activity_logs');
+        })->name('activity-logs');
+    });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
