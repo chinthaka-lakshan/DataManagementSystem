@@ -85,9 +85,10 @@ class HouseholdsController extends Controller
      * Display the specified resource.
      */
 
-    public function show($id)
+    public function show(Households $household)
     {
-        return redirect()->route('households.index');
+        $household->load(['division', 'citizens']);
+        return view('households.show', compact('household'));
     }
 
     /**

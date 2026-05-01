@@ -88,19 +88,25 @@
                         <label for="religion" class="block text-sm font-semibold text-gray-700 mb-2">Religion <span class="text-brand-600">*</span></label>
                         <select name="religion" id="religion" required
                             class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm">
-                            <option value="Buddhism">Buddhism</option>
-                            <option value="Hinduism">Hinduism</option>
-                            <option value="Islam">Islam</option>
-                            <option value="Christianity">Christianity</option>
-                            <option value="Other">Other</option>
+                            <option value="">-- Select --</option>
+                            @foreach(['Buddhism', 'Hinduism', 'Islam', 'Christianity', 'Other'] as $rel)
+                                <option value="{{ $rel }}" {{ old('religion') == $rel ? 'selected' : '' }}>{{ $rel }}</option>
+                            @endforeach
                         </select>
+                        @error('religion') <p class="text-xs text-brand-600 mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
                         <label for="marital_status" class="block text-sm font-semibold text-gray-700 mb-2">Marital Status <span class="text-brand-600">*</span></label>
-                        <input type="text" name="marital_status" id="marital_status" required value="{{ old('marital_status') }}"
-                            class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
-                            placeholder="Single / Married">
+                        <select name="marital_status" id="marital_status" required
+                            class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm">
+                            <option value="">-- Select --</option>
+                            <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single</option>
+                            <option value="Married" {{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married</option>
+                            <option value="Divorced" {{ old('marital_status') == 'Divorced' ? 'selected' : '' }}>Divorced</option>
+                            <option value="Widowed" {{ old('marital_status') == 'Widowed' ? 'selected' : '' }}>Widowed</option>
+                        </select>
+                        @error('marital_status') <p class="text-xs text-brand-600 mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
             </div>

@@ -68,7 +68,7 @@ class CitizensController extends Controller
             'date_of_birth' => 'required|date',
             'gender' => 'required|in:Male,Female,Other',
             'religion' => 'required|in:Buddhism,Hinduism,Islam,Christianity,Other',
-            'marital_status' => 'required|string',
+            'marital_status' => 'required|in:Single,Married,Divorced,Widowed',
             'occupation' => 'nullable|string',
             'education_level' => 'nullable|string',
             'income_level' => 'nullable|numeric',
@@ -114,7 +114,7 @@ class CitizensController extends Controller
             // Use 'in' instead of 'enum' for simple strings
             'gender' => 'required|in:Male,Female,Other',
             'religion' => 'required|in:Buddhism,Hinduism,Islam,Christianity,Other',
-            'marital_status' => 'required|string',
+            'marital_status' => 'required|in:Single,Married,Divorced,Widowed',
             'occupation' => 'nullable|string',
             'education_level' => 'nullable|string',
             // Use 'numeric' for decimal/money values
