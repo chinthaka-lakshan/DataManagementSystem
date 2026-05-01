@@ -20,9 +20,13 @@ Route::middleware(['auth', 'active'])->group(function () {
         ->name('dashboard');
 
     Route::resource('divisions', DivisionsController::class);
-    Route::resource('households', HouseholdsController::class);
-    Route::resource('citizens', CitizensController::class);
-    Route::resource('certificates', CertificatesController::class);
+    
+    // GN User only routes
+    Route::middleware('role:user')->group(function () {
+        Route::resource('households', HouseholdsController::class);
+        Route::resource('citizens', CitizensController::class);
+        Route::resource('certificates', CertificatesController::class);
+    });
 
     // Admin only routes
     Route::middleware('role:admin')->group(function () {

@@ -1,6 +1,83 @@
 <x-admin-layout>
-    <x-slot name="title">GN Administrative Dashboard</x-slot>
+    <x-slot name="title">Dashboard</x-slot>
 
+    @if(auth()->user()->role === 'admin')
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900">System Administrator Dashboard</h2>
+            <p class="text-sm text-gray-500 mt-1">Overview of system health and user access</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-soft">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="p-3 bg-purple-50 rounded-xl text-purple-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    </div>
+                    <h4 class="font-bold text-gray-900">Total System Users</h4>
+                </div>
+                <p class="text-3xl font-bold text-gray-900">{{ number_format($totalUsers ?? 0) }}</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-soft">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="p-3 bg-green-50 rounded-xl text-green-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <h4 class="font-bold text-gray-900">Active Accounts</h4>
+                </div>
+                <p class="text-3xl font-bold text-gray-900">{{ number_format($activeUsersCount ?? 0) }}</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-soft">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="p-3 bg-orange-50 rounded-xl text-orange-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                    </div>
+                    <h4 class="font-bold text-gray-900">Registered GN Divisions</h4>
+                </div>
+                <p class="text-3xl font-bold text-gray-900">{{ number_format($totalDivisions ?? 0) }}</p>
+            </div>
+        </div>
+
+        <!-- Active Users Table -->
+        <div class="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden mb-8">
+            <div class="bg-gray-50 px-8 py-4 border-b border-gray-100 flex items-center justify-between">
+                <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider">Recently Active Users</h3>
+                <span class="px-3 py-1 bg-green-50 text-green-600 text-xs font-bold rounded-lg border border-green-100">ACTIVE</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-100">
+                        <tr>
+                            <th class="px-6 py-4">Name</th>
+                            <th class="px-6 py-4">Email</th>
+                            <th class="px-6 py-4">Role</th>
+                            <th class="px-6 py-4 text-right">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 text-sm">
+                        @foreach($activeUsers as $user)
+                            <tr class="hover:bg-gray-50/50 transition-colors">
+                                <td class="px-6 py-4 font-bold text-gray-900">{{ $user->name }}</td>
+                                <td class="px-6 py-4 text-gray-500">{{ $user->email }}</td>
+                                <td class="px-6 py-4 text-gray-500">
+                                    <span class="px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' }}">
+                                        {{ $user->role }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-bold bg-green-100 text-green-700">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-green-600"></span>
+                                        Active
+                                    </span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @else
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
             <h2 class="text-2xl font-bold text-gray-900">GN Administrative Dashboard</h2>
@@ -152,8 +229,9 @@
             <h3 class="text-xl font-bold text-gray-900 mb-2">Division Selection Required</h3>
             <p class="text-gray-600 max-w-sm mx-auto">Please select a specific GN Division from the dropdown menu to view detailed analytics and citizen records.</p>
         </div>
+        </div>
     @endif
-
+    @endif
     @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -172,7 +250,7 @@
                 data: {
                     labels: ['Men', 'Women'],
                     datasets: [{
-                        data: [{{ $stats['men'] }}, {{ $stats['women'] }}],
+                        data: [{{ $stats['men'] ?? 0 }}, {{ $stats['women'] ?? 0 }}],
                         backgroundColor: ['#3B82F6', '#EC4899'],
                         borderWidth: 0,
                         hoverOffset: 10
@@ -191,7 +269,7 @@
                     labels: ['Buddhism', 'Christianity'],
                     datasets: [{
                         label: 'Citizen Count',
-                        data: [{{ $stats['buddhism'] }}, {{ $stats['christianity'] }}],
+                        data: [{{ $stats['buddhism'] ?? 0 }}, {{ $stats['christianity'] ?? 0 }}],
                         backgroundColor: '#DC2626',
                         borderRadius: 8,
                         barThickness: 40
