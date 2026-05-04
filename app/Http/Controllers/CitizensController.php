@@ -6,6 +6,7 @@ use App\Models\Citizens;
 use App\Models\Divisions;
 use App\Models\Households;
 use Illuminate\Http\Request;
+use App\Models\Occupation;
 
 class CitizensController extends Controller
 {
@@ -76,6 +77,13 @@ class CitizensController extends Controller
             'special_notes' => 'nullable|string',
         ]);
 
+         // 🔥 Save occupation into occupations table
+    if (!empty($validated['occupation'])) {
+        Occupation::firstOrCreate([
+            'name' => trim($validated['occupation'])
+        ]);
+    }
+
         Citizens::create($validated);
         return redirect()->route('citizens.index')->with('success', 'Member added to household.');
     }
@@ -134,5 +142,17 @@ class CitizensController extends Controller
     {
         $citizen->delete();
         return redirect()->route('citizens.index')->with('success', 'Citizen removed.');
+    }
+
+    public function searchOccupation(Request $request)
+    {
+        $query = $request->get('query');
+
+        $occupations = Occupation::where('name', 'LIKE', "%{$query}%")
+            ->orderBy('name')
+            ->limit(10)
+            ->pluck('name');
+
+        return response()->json($occupations);
     }
 }

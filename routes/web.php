@@ -22,6 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('divisions', DivisionsController::class);
     Route::resource('households', HouseholdsController::class);
     Route::resource('citizens', CitizensController::class);
+    Route::get('/occupations/search', [CitizensController::class, 'searchOccupation'])
+    ->name('occupations.search');
     Route::resource('certificates', CertificatesController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

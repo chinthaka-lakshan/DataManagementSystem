@@ -94,9 +94,22 @@
                     <div class="mb-6">
                         <h3 class="text-lg font-medium text-gray-900">Social & Financial Status</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                            <div>
+                            <div class="relative">
                                 <x-input-label for="occupation" :value="__('Occupation')" />
-                                <x-text-input id="occupation" name="occupation" type="text" placeholder="Enter occupation" class="mt-1 block w-full" :value="old('occupation')" />
+
+                                <x-text-input 
+                                    id="occupation" 
+                                    name="occupation" 
+                                    type="text" 
+                                    class="mt-1 block w-full"
+                                    placeholder="Enter occupation"
+                                    autocomplete="off"
+                                    :value="old('occupation')" 
+                                />
+
+                                <ul id="occupation-list"
+                                    class="absolute z-50 bg-white border w-full mt-1 rounded-md shadow hidden max-h-48 overflow-y-auto">
+                                </ul>
                             </div>
 
                             <div>
@@ -130,3 +143,47 @@
         </div>
     </div>
 </x-app-layout>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function () {
+
+    $('#occupation').on('keyup', function () {
+        let query = $(this).val();
+
+        if (query.length < 1) {
+            $('#occupation-list').addClass('hidden').empty();
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('occupations.search') }}",
+            type: "GET",
+            data: { query: query },
+            success: function (data) {
+
+                let list = '';
+
+                data.forEach(function (item) {
+                    list += `<li class="px-3 py-2 hover:bg-gray-100 cursor-pointer occupation-item">${item}</li>`;
+                });
+
+                $('#occupation-list').removeClass('hidden').html(list);
+            }
+        });
+    });
+
+    $(document).on('click', '.occupation-item', function () {
+        $('#occupation').val($(this).text());
+        $('#occupation-list').addClass('hidden').empty();
+    });
+
+    $(document).click(function (e) {
+        if (!$(e.target).closest('#occupation').length) {
+            $('#occupation-list').addClass('hidden').empty();
+        }
+    });
+
+});
+</script>
