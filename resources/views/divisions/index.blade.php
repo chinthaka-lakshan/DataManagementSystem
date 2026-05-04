@@ -98,6 +98,45 @@
                         + Add New Division
                     </a>
                 @endif
+<<<<<<< HEAD
+=======
+
+                @if(session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Division Code</th>
+                                <th>Division Name</th>
+                                <th>Divisional Secretariat</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($divisions as $division)
+                                <tr>
+                                    <td>{{ $division->division_code }}</td>
+                                    <td>{{ $division->division_name }}</td>
+                                    <td>{{ $division->divisional_secretariat }}</td>
+                                    <td>
+                                        <a href="{{ route('divisions.edit', $division->id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center">No divisions found. Start by adding one.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+>>>>>>> 45718a9 (occupation auto complete update)
             </div>
         @endforelse
     </div>
