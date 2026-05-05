@@ -10,10 +10,11 @@ class DivisionsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $divisions = auth()->user()->divisions;
 
+        $divisions = auth()->user()->divisions; 
         return view('divisions.index', compact('divisions'));
     }
 

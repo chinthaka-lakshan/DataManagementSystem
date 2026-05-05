@@ -32,12 +32,13 @@ class HouseholdsController extends Controller
                 return $query->where('division_id', $selectedDivision);
             })
             
-            // 5. Search by Address, House Number, or Head of Household
+            // 5. Search by Address, House Number, Head of Household, or NIC
             ->when($search, function ($query, $search) {
                 return $query->where(function($q) use ($search) {
                     $q->where('address', 'like', '%' . $search . '%')
                     ->orWhere('house_number', 'like', '%' . $search . '%')
-                    ->orWhere('head_of_household', 'like', '%' . $search . '%');
+                    ->orWhere('head_of_household', 'like', '%' . $search . '%')
+                    ->orWhere('nic', 'like', '%' . $search . '%');
                 });
             })
             ->get();
@@ -65,6 +66,7 @@ class HouseholdsController extends Controller
             'address' => 'required|string',
             'division_id' => 'required|exists:divisions,id',
             'head_of_household' => 'required|string',
+            'nic' => 'nullable|string|max:20',
         ]);
 
         Households::create($validated);
@@ -83,9 +85,10 @@ class HouseholdsController extends Controller
      * Display the specified resource.
      */
 
-    public function show($id)
+    public function show(Households $household)
     {
-        return redirect()->route('households.index');
+        $household->load(['division', 'citizens']);
+        return view('households.show', compact('household'));
     }
 
     /**
@@ -99,6 +102,7 @@ class HouseholdsController extends Controller
             'address' => 'required|string',
             'division_id' => 'required|exists:divisions,id',
             'head_of_household' => 'required|string',
+            'nic' => 'nullable|string|max:20',
         ]);
 
         $household->update($validated);

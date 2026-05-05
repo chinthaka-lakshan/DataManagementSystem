@@ -13,7 +13,7 @@ Route::get('/', function () {
 });
 
 // Move divisions inside the auth middleware for security
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'active'])->group(function () {
     // Only keep this version of the dashboard route
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->middleware(['verified'])

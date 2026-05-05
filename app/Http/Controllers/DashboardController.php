@@ -10,6 +10,16 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        if (auth()->user()->role === 'admin') {
+            $totalUsers = \App\Models\User::count();
+            $activeUsersCount = \App\Models\User::where('is_active', true)->count();
+            $activeUsers = \App\Models\User::where('is_active', true)->latest()->take(10)->get();
+            $totalDivisions = \App\Models\Divisions::count();
+
+            return view('dashboard', compact('totalUsers', 'activeUsersCount', 'activeUsers', 'totalDivisions'));
+        }
+
+        // GN User Logic
         // 1. Fetch ONLY divisions belonging to the authenticated user
         $divisions = auth()->user()->divisions;
         

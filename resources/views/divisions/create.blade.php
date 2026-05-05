@@ -1,79 +1,61 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Add New GN Division') }}
-        </h2>
-    </x-slot>
+<x-admin-layout>
+    <x-slot name="title">Add New GN Division</x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                
-                <div class="mb-4">
-                    <h4 class="text-secondary">Division Details</h4>
-                    <p class="text-sm text-muted">Enter the official details from the Divisional Secretariat.</p>
-                </div>
-
-                <form action="{{ route('divisions.store') }}" method="POST">
-                    @csrf <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="division_code" class="form-label font-bold">Division Code</label>
-                            <input type="text" 
-                                   name="division_code" 
-                                   id="division_code"
-                                   class="form-control @error('division_code') is-invalid @enderror" 
-                                   placeholder="e.g. 602-C" 
-                                   value="{{ old('division_code') }}" 
-                                   required>
-                            @error('division_code')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="division_name" class="form-label font-bold">Division Name</label>
-                            <input type="text" 
-                                   name="division_name" 
-                                   id="division_name"
-                                   class="form-control @error('division_name') is-invalid @enderror" 
-                                   placeholder="e.g. Kottawa North" 
-                                   value="{{ old('division_name') }}" 
-                                   required>
-                            @error('division_name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12 mb-4">
-                            <label for="divisional_secretariat" class="form-label font-bold">Divisional Secretariat</label>
-                            <input type="text" 
-                                   name="divisional_secretariat" 
-                                   id="divisional_secretariat"
-                                   class="form-control @error('divisional_secretariat') is-invalid @enderror" 
-                                   placeholder="e.g. Maharagama" 
-                                   value="{{ old('divisional_secretariat') }}" 
-                                   required>
-                            @error('divisional_secretariat')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-end mt-4">
-                        <a href="{{ route('divisions.index') }}" class="btn btn-outline-secondary me-2">
-                            Cancel
-                        </a>
-                        <button type="submit" class="btn btn-primary px-4" style="background-color: #003366; border: none;">
-                            Save Division
-                        </button>
-                    </div>
-                </form>
-
-            </div>
+    <div class="max-w-4xl mx-auto">
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900">Add New GN Division</h2>
+            <p class="text-sm text-gray-500 mt-1">Register a new Grama Niladhari division in the system.</p>
         </div>
-    </div>
-</x-app-layout>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <form action="{{ route('divisions.store') }}" method="POST" class="space-y-6">
+            @csrf 
+            <div class="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden">
+                <div class="bg-gray-50 px-8 py-4 border-b border-gray-100">
+                    <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider">Division Details</h3>
+                </div>
+                <div class="p-8 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="division_code" class="block text-sm font-semibold text-gray-700 mb-2">Division Code <span class="text-brand-600">*</span></label>
+                            <input type="text" name="division_code" id="division_code" required value="{{ old('division_code') }}"
+                                placeholder="e.g. 602-C"
+                                class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm">
+                            @error('division_code')
+                                <p class="mt-2 text-xs text-brand-600 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="division_name" class="block text-sm font-semibold text-gray-700 mb-2">Division Name <span class="text-brand-600">*</span></label>
+                            <input type="text" name="division_name" id="division_name" required value="{{ old('division_name') }}"
+                                placeholder="e.g. Kottawa North"
+                                class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm">
+                            @error('division_name')
+                                <p class="mt-2 text-xs text-brand-600 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="divisional_secretariat" class="block text-sm font-semibold text-gray-700 mb-2">Divisional Secretariat <span class="text-brand-600">*</span></label>
+                        <input type="text" name="divisional_secretariat" id="divisional_secretariat" required value="{{ old('divisional_secretariat') }}"
+                            placeholder="e.g. Maharagama"
+                            class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm">
+                        @error('divisional_secretariat')
+                            <p class="mt-2 text-xs text-brand-600 font-medium">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 pt-6">
+                <a href="{{ route('divisions.index') }}" class="px-8 py-3 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-colors">
+                    Cancel
+                </a>
+                <button type="submit" class="px-8 py-3 bg-brand-600 text-white font-bold rounded-xl hover:bg-brand-700 shadow-md shadow-brand-200 transition-colors">
+                    Save Division
+                </button>
+            </div>
+        </form>
+    </div>
+</x-admin-layout>
