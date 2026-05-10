@@ -107,6 +107,12 @@
                     </div>
                 @endif
 
+                @if(session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <thead class="table-light">
