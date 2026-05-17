@@ -98,14 +98,6 @@
                         + Add New Division
                     </a>
                 @endif
-<<<<<<< HEAD
-=======
-
-                @if(session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
-                @endif
 
                 @if(session('error'))
                     <div class="alert alert-danger">
@@ -142,7 +134,6 @@
                     </table>
                 </div>
 
->>>>>>> 45718a9 (occupation auto complete update)
             </div>
         @endforelse
     </div>

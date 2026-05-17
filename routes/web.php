@@ -20,13 +20,14 @@ Route::middleware(['auth', 'active'])->group(function () {
         ->name('dashboard');
 
     Route::resource('divisions', DivisionsController::class);
-<<<<<<< HEAD
     
     // GN User only routes
     Route::middleware('role:user')->group(function () {
         Route::resource('households', HouseholdsController::class);
         Route::resource('citizens', CitizensController::class);
         Route::resource('certificates', CertificatesController::class);
+        Route::get('/occupations/search', [CitizensController::class, 'searchOccupation'])
+    ->name('occupations.search');
     });
 
     // Admin only routes
@@ -37,13 +38,6 @@ Route::middleware(['auth', 'active'])->group(function () {
             return view('admin.activity_logs');
         })->name('activity-logs');
     });
-=======
-    Route::resource('households', HouseholdsController::class);
-    Route::resource('citizens', CitizensController::class);
-    Route::get('/occupations/search', [CitizensController::class, 'searchOccupation'])
-    ->name('occupations.search');
-    Route::resource('certificates', CertificatesController::class);
->>>>>>> 45718a9 (occupation auto complete update)
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
