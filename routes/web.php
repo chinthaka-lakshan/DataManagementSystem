@@ -26,6 +26,8 @@ Route::middleware(['auth', 'active'])->group(function () {
         Route::resource('households', HouseholdsController::class);
         Route::resource('citizens', CitizensController::class);
         Route::resource('certificates', CertificatesController::class);
+        Route::get('/occupations/search', [CitizensController::class, 'searchOccupation'])
+    ->name('occupations.search');
     });
 
     // Admin only routes

@@ -30,5 +30,8 @@ class DatabaseSeeder extends Seeder
             'role' => 'user',
             'is_active' => true,
         ]);
+
+        $this->call(OccupationSeeder::class);
     }
+    
 }

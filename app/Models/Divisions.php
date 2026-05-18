@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Households;
+use App\Models\Citizens;
 
 class Divisions extends Model
 {
@@ -20,5 +22,9 @@ class Divisions extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+    public function citizens()
+    {
+        return $this->hasMany(Citizens::class, 'division_id');
     }
 }

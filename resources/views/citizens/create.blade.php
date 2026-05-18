@@ -1,11 +1,11 @@
 <x-admin-layout>
     <x-slot name="title">Register New Citizen</x-slot>
 
-    <div class="max-w-5xl mx-auto">
-        <div class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900">Register New Citizen</h2>
-            <p class="text-sm text-gray-500 mt-1">Add a new individual to the official database and assign them to a household.</p>
-        </div>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-8">
+                
+
 
         <form action="{{ route('citizens.store') }}" method="POST" class="space-y-6 pb-12">
             @csrf 
@@ -119,9 +119,22 @@
                 <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="occupation" class="block text-sm font-semibold text-gray-700 mb-2">Occupation</label>
-                        <input type="text" name="occupation" id="occupation" value="{{ old('occupation') }}"
-                            class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
-                            placeholder="Enter occupation">
+                        <div class="relative">
+                                
+                                <x-text-input 
+                                    id="occupation" 
+                                    name="occupation" 
+                                    type="text" 
+                                    class="mt-1 block w-full"
+                                    placeholder="Enter occupation"
+                                    autocomplete="off"
+                                    :value="old('occupation')" 
+                                />
+
+                                <ul id="occupation-list"
+                                    class="absolute z-50 bg-white border w-full mt-1 rounded-md shadow hidden max-h-48 overflow-y-auto">
+                                </ul>
+                            </div>
                     </div>
 
                     <div>
@@ -167,4 +180,48 @@
             </div>
         </form>
     </div>
-</x-admin-layout>
+</x-app-layout>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function () {
+
+    $('#occupation').on('keyup', function () {
+        let query = $(this).val();
+
+        if (query.length < 1) {
+            $('#occupation-list').addClass('hidden').empty();
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('occupations.search') }}",
+            type: "GET",
+            data: { query: query },
+            success: function (data) {
+
+                let list = '';
+
+                data.forEach(function (item) {
+                    list += `<li class="px-3 py-2 hover:bg-gray-100 cursor-pointer occupation-item">${item}</li>`;
+                });
+
+                $('#occupation-list').removeClass('hidden').html(list);
+            }
+        });
+    });
+
+    $(document).on('click', '.occupation-item', function () {
+        $('#occupation').val($(this).text());
+        $('#occupation-list').addClass('hidden').empty();
+    });
+
+    $(document).click(function (e) {
+        if (!$(e.target).closest('#occupation').length) {
+            $('#occupation-list').addClass('hidden').empty();
+        }
+    });
+
+});
+</script>
